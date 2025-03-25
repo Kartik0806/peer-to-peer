@@ -4,6 +4,10 @@ import { Box, Container, Typography, TextField, Button, Paper, Tab, Tabs } from 
 import axios from 'axios';
 import { useAuth } from '../providers/authProvider.jsx';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
+
+// console.log('API_URL:', process.env.NODE_ENV);
 const AuthPage = () => {
     const { user, setUser, loading } = useAuth();
     const navigate = useNavigate();
@@ -35,12 +39,11 @@ const AuthPage = () => {
         };
 
         try {
-            const response = await axios.post(`http://localhost:5000/${tab === 0 ? 'login' : 'register'}`, payload, {
+            const response = await axios.post(`${API_URL}/${tab === 0 ? 'login' : 'register'}`, payload, {
                 withCredentials: true});
             const data = response.data;
 
             setUser(data.userCredential.user);
-            console.log(data.userCredential.user)
             navigate('/');
 
         } catch (error) {

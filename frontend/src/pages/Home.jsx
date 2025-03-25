@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
 const Home = () => {
     const [meetCode, setMeetCode] = useState('');
     const navigate = useNavigate();
     const handleLogout = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/logout', {
+            const response = await axios.get(`${API_URL}/logout`, {
                 withCredentials: true
             });
             navigate('/auth');
@@ -21,7 +23,7 @@ const Home = () => {
     const handleJoinMeet = () => {
         if (meetCode.trim()) {
             try {
-                const response = axios.post('http://localhost:5000/meet', {
+                const response = axios.post(`${API_URL}/meet`, {
                     "meetCode": meetCode
                 }, {
                     withCredentials: true

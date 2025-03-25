@@ -3,6 +3,9 @@ import { io } from "socket.io-client";
 import { useParams } from "react-router";
 import { useAuth } from "../providers/authProvider.jsx";
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/';
+
+
 export const Meet = () => {
     const { id } = useParams();
     const meetCode = id;
@@ -52,6 +55,7 @@ export const Meet = () => {
 
                 peer.current.onicecandidate = (event) => {
                     if (event.candidate) {
+                        console.log("Sending ICE candidate:", );
                         socketInstance.emit("sendIce", event.candidate);
                     }
                 };
@@ -64,7 +68,7 @@ export const Meet = () => {
             }
         };
 
-        const newSocket = io("http://localhost:5000", {
+        const newSocket = io(API_URL, {
             withCredentials: true,
             query: { meetCode },
             auth: { user_token: user?.token || "" },  // Use actual user token
@@ -74,21 +78,16 @@ export const Meet = () => {
 
         newSocket.on("connect", () => {
             console.log("Connected to socket", newSocket.id);
-            setupRTC(newSocket).then(() => {
-                newSocket.on("createOffer", () => createOffer(newSocket));
-                newSocket.on("recieveOffer", (offer) => handleOffer(offer, newSocket));
-                newSocket.on("recieveAnswer", handleAnswer);
-                newSocket.on("receiveIce", handleIceCandidate);
-            });
+            setupRTC(newSocket)
             newSocket.emit("joinRoom", meetCode);
         });
 
         newSocket.on("createOffer", () => createOffer(newSocket));  
 
-        newSocket.on("recieveOffer", (offer) => {
+        newSocket.on("receiveOffer", (offer) => {
             handleOffer(offer, newSocket);
         });
-        newSocket.on("recieveAnswer", handleAnswer);
+        newSocket.on("receiveAnswer", handleAnswer);
         newSocket.on("receiveIce", handleIceCandidate);
         newSocket.on("message", (data) => {
             setMessages(prev => [...prev, data]);
@@ -105,13 +104,14 @@ export const Meet = () => {
                 peer.current.close();
             }
         };
-    }, [meetCode, user?.token]);  
+    }, [meetCode,user?.token]);  
 
     const createOffer = async (socket) => {
         try {
             if (!peer.current) return;
             const offer = await peer.current.createOffer();
             await peer.current.setLocalDescription(offer);
+            console.log("sending offer",)
             socket.emit("sendOffer", offer);
         } catch (error) {
             handleError(error, "offer creation");
@@ -126,15 +126,14 @@ export const Meet = () => {
             retries++;
         }
 
-        console.log(peer.current , socket)
         try {
             if (!peer.current || !socket) return;
-            console.log("inside handle offer:", socket)
+            console.log("inside handle offer:", )
 
             await peer.current.setRemoteDescription(new RTCSessionDescription(offer));
             const answer = await peer.current.createAnswer();
             await peer.current.setLocalDescription(answer);
-            console.log("sending answer", answer)
+            console.log("sending answer")
             socket.emit("sendAnswer", answer);
         } catch (error) {
             handleError(error, "offer handling");
@@ -150,16 +149,19 @@ export const Meet = () => {
         }
         try {
             if (!peer.current) return;
-            console.log("lol")
+            console.log("inside handle answer:",)
             await peer.current.setRemoteDescription(new RTCSessionDescription(answer));
+            console.log(peer.current)
         } catch (error) {
             handleError(error, "answer handling");
         }
     };
 
     const handleIceCandidate = async (candidate) => {
+        console.log("inside handle ice candidate:", peer.current)
         try {
             if (!peer.current) return;
+            console.log("Received ICE candidate:");
             await peer.current.addIceCandidate(new RTCIceCandidate(candidate));
         } catch (error) {
             handleError(error, "ICE candidate handling");

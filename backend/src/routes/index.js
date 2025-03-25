@@ -17,7 +17,7 @@ router.get('/verifyUser', verifyToken, (req, res) => {
 });
 
 router.post('/login', authContoller.login);
-router.post('/register', authContoller.register);
+router.post('/register', authContoller.register); 
 router.get('/logout', authContoller.logout);
 router.post('/meet', meetController.joinMeet);
 export default router;

@@ -3,15 +3,14 @@ import {
     admin
 } from "../config/firebase.js";
 import {
-        createUserWithEmailAndPassword,
-        signInWithEmailAndPassword,
-        signOut,
-        sendEmailVerification,
-        sendPasswordResetEmail,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+    sendEmailVerification,
+    sendPasswordResetEmail,
 } from "firebase/auth";
 
-class AuthController
-{
+class AuthController {
     login(req, res) {
         if (!req.body.email || !req.body.password) {
             return res.status(400).json({ error: 'Email and password required' });
@@ -23,7 +22,9 @@ class AuthController
                 const idToken = userCredential._tokenResponse.idToken
                 if (idToken) {
                     res.cookie('access_token', idToken, {
-                        httpOnly: false
+                        httpOnly: false,
+                        sameSite: 'None',
+                        secure: true
                     });
                     res.status(200).json({ message: "User logged in successfully", userCredential });
                 } else {
@@ -43,7 +44,7 @@ class AuthController
     register(req, res) {
         console.log(req.body);
 
-        if (!req.body.email || !req.body.password ) {  
+        if (!req.body.email || !req.body.password) {
             return res.status(400).json({ error: 'Email and password required' });
         }
 

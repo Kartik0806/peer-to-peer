@@ -4,6 +4,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from 'axios';
 const AuthContext = createContext();
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
+// console.log('API_URL:', API_URL);
 export const AuthProvider = ({ children }) => {
 
     const [isAuth, setIsAuth] = useState(false);
@@ -15,17 +18,18 @@ export const AuthProvider = ({ children }) => {
         const checkAuth = async () => {
             try {
 
-                const response = await axios.get('http://localhost:5000/verifyUser', {
-                    withCredentials: true
+                const response = await axios.get(`${API_URL}/verifyUser`, {
+                    withCredentials:true,
                 });
                 const data = response.data;
                 setUser(data.user);
                 setIsAuth(true);
+
             }
             catch (error) {
-                console.log('authprovider: not authorized');
-                setIsAuth(false);
-                setUser(null);
+                console.log('authprovider: not authorized', error);
+                // setIsAuth(false);
+                // setUser(null);
             } finally {
                 setLoading(false);
             }

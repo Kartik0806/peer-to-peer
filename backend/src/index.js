@@ -7,7 +7,7 @@ import { initialiseSocket } from './socket.js';
 
 const app = express();
 app.use(cors({
-    origin: ['http://localhost:5173'],
+    origin: ['http://localhost:5173', 'https://bringyoahhtome.vercel.app'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     credentials: true
 }));
@@ -15,6 +15,8 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 app.use(router);
+
+app.use('/api', router);
 
 const httpServer = createServer(app);
 initialiseSocket(httpServer);

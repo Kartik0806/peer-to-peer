@@ -7,7 +7,7 @@ export function initialiseSocket(httpServer) {
 
     const io = new Server(httpServer, {
         cors: {
-            origin: ["http://localhost:5173"], // Change this to match your React app's URL
+            origin: ["http://localhost:5173", "https://bringyoahhtome.vercel.app"], 
             methods: ["GET", "POST"],
             credentials: true,
         },
@@ -62,17 +62,16 @@ export function initialiseSocket(httpServer) {
             if (clients && clients.size > 1) {
                 const newClientSocketId = [...clients].pop(); 
                 console.log(newClientSocketId)
-                io.to(newClientSocketId).emit("recieveOffer", offer); 
+                io.to(newClientSocketId).emit("receiveOffer", offer); 
             }            
         });
 
         socket.on("sendAnswer", (answer) => {
-            console.log("answer");
-            socket.to(socket.meetCode).emit("recieveAnswer", answer);
+            socket.to(socket.meetCode).emit("receiveAnswer", answer);
         });
 
         socket.on("sendIce", (candidate) => {
-            socket.to(socket.meetCode).emit("recieveIce", candidate);
+            socket.to(socket.meetCode).emit("receiveIce", candidate);
         });
 
         socket.on("disconnect", () => {
