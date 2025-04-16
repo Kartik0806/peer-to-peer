@@ -7,7 +7,7 @@ export function initialiseSocket(httpServer) {
 
     const io = new Server(httpServer, {
         cors: {
-            origin: ["http://localhost:5173", "https://bringyoahhtome.vercel.app"], 
+            origin: ["http://localhost:5173", "https://peer-to-peer-one.vercel.app/"], 
             methods: ["GET", "POST"],
             credentials: true,
         },
