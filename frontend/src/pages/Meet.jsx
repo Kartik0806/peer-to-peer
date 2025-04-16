@@ -82,7 +82,7 @@ export const Meet = () => {
 
         newSocket.on("connect", () => {
             console.log("Connected to socket", newSocket.id);
-            setupRTC(newSocket)
+            await setupRTC(newSocket)
             newSocket.emit("joinRoom", meetCode);
         });
 
