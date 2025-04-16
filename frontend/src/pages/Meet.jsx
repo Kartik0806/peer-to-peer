@@ -5,6 +5,9 @@ import { useAuth } from "../providers/authProvider.jsx";
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/';
 
+const SOCKET_URL = import.meta.env.PROD
+  ? "https://peer-to-peer-bun5.onrender.com"
+  : "http://localhost:5000";
 
 export const Meet = () => {
     const { id } = useParams();
@@ -68,7 +71,7 @@ export const Meet = () => {
             }
         };
 
-        const newSocket = io(API_URL, {
+        const newSocket = io(SOCKET_URL, {
             withCredentials: true,
             query: { meetCode },
             auth: { user_token: user?.token || "" },  // Use actual user token
