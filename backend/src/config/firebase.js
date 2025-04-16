@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import admin from "firebase-admin";
 import serviceAccount from "./firebaseService.json" assert { type: "json" };
 
-
+const serviceAccountPath = '/etc/secrets/firebaseService.json';
 import {
     getAuth,
 } from "firebase/auth";
@@ -12,7 +12,7 @@ dotenv.config();
 
 
 admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
+    credential: admin.credential.cert(serviceAccountPath),
 });
 
 const firebaseConfig = {
