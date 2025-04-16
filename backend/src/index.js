@@ -7,7 +7,7 @@ import { initialiseSocket } from './socket.js';
 
 const app = express();
 app.use(cors({
-    origin: ['http://localhost:5173', 'https://bringyoahhtome.vercel.app'],
+    origin: ['http://localhost:5173', 'https://peer-to-peer-one.vercel.app/'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     credentials: true
 }));
