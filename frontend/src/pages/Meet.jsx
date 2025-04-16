@@ -9,6 +9,7 @@ const SOCKET_URL = import.meta.env.PROD
   ? "https://peer-to-peer-bun5.onrender.com"
   : "http://localhost:5000";
 
+console.log(SOCKET_URL)
 export const Meet = () => {
     const { id } = useParams();
     const meetCode = id;
