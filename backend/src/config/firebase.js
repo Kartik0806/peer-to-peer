@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import admin from "firebase-admin";
-import serviceAccount from "./firebaseService.json" assert { type: "json" };
+// import serviceAccount from "./firebaseService.json" assert { type: "json" };
 
 const serviceAccountPath = '/etc/secrets/firebaseService.json';
 import {
