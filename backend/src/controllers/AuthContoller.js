@@ -22,7 +22,7 @@ class AuthController {
                 const idToken = userCredential._tokenResponse.idToken
                 if (idToken) {
                     res.cookie('access_token', idToken, {
-                        httpOnly: false,
+                        httpOnly: true,
                         sameSite: 'None',
                         secure: true
                     });
