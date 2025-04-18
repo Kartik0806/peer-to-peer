@@ -77,7 +77,12 @@ class AuthController {
         // console.log(req.cookies.access_token);
         signOut(auth)
             .then(() => {
-                res.clearCookie('access_token');
+                res.clearCookie('access_token', {
+                httpOnly: true,
+                sameSite: 'None',
+                secure: true,
+                path: '/', // Add this if it was implicitly set
+            });
                 res.status(200).json({ message: "User logged out successfully" });
             })
             .catch((error) => {
