@@ -80,7 +80,7 @@ export const Meet = () => {
 
         setSocket(newSocket);
 
-        newSocket.on("connect", () => {
+        newSocket.on("connect", async () => {
             console.log("Connected to socket", newSocket.id);
             await setupRTC(newSocket)
             newSocket.emit("joinRoom", meetCode);
